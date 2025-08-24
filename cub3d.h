@@ -6,7 +6,7 @@
 /*   By: ahamza <ahamza@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 21:47:41 by ahamza            #+#    #+#             */
-/*   Updated: 2025/08/24 21:47:42 by ahamza           ###   ########.fr       */
+/*   Updated: 2025/08/24 22:51:50 by ahamza           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,6 +243,7 @@ int		check_rgb_text(t_cub3d cub);
 void	set_dir_plane_ns(t_cub3d *cub, int south);
 void	set_dir_plane_ew(t_cub3d *cub, int west);
 void	init_player_direction(t_cub3d *cub);
+void	free_split(char **tab);
 
 // RAY_CASTING.C
 int		get_wall_orientation_dda(int side, int step_x, int step_y);

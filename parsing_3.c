@@ -6,11 +6,26 @@
 /*   By: ahamza <ahamza@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 21:45:43 by ahamza            #+#    #+#             */
-/*   Updated: 2025/08/24 21:45:44 by ahamza           ###   ########.fr       */
+/*   Updated: 2025/08/24 22:51:08 by ahamza           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	free_split(char **tab)
+{
+	int	i;
+
+	if (!tab)
+		return ;
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}
 
 void	set_dir_plane_ns(t_cub3d *cub, int south)
 {
