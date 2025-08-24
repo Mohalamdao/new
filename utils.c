@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: molamdao <molamdao@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahamza <ahamza@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 10:48:02 by molamdao          #+#    #+#             */
-/*   Updated: 2025/05/12 11:34:13 by molamdao         ###   ########.fr       */
+/*   Updated: 2025/08/24 20:29:31 by ahamza           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,16 @@
 char	*ft_strdup(char *src)
 {
 	int		i;
-	char	*dest;
 	int		len_src;
+	char	*dest;
 
 	i = 0;
-	len_src = ft_strlen(src) + 1;
-	dest = (char *)malloc((len_src) * sizeof(char));
+	if (!src)
+		return (NULL);
+	len_src = (int)ft_strlen(src) + 1;
+	dest = (char *)malloc(len_src * sizeof(char));
 	if (!dest)
-		return (0);
+		return (NULL);
 	while (src[i])
 	{
 		dest[i] = src[i];
@@ -32,30 +34,30 @@ char	*ft_strdup(char *src)
 	return (dest);
 }
 
-char *skip_space(char *str)
+char	*skip_space(char *str)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while(str[i] == ' ' ||  str[i] == '\t')
-        i++;
-    return(str + i);
+	i = 0;
+	while (str[i] == ' ' || str[i] == '\t')
+		i++;
+	return (str + i);
 }
 
 int	ft_atoi(const char *str)
 {
 	int	i;
 	int	res;
-	int	signe;
+	int	sign;
 
 	i = 0;
 	res = 0;
-	signe = 1;
+	sign = 1;
 	while ((str[i] >= 9 && str[i] <= 13 && str[i]) || str[i] == 32)
 		i++;
 	if (str[i] == '-')
 	{
-		signe *= -1;
+		sign *= -1;
 		i++;
 	}
 	else if (str[i] == '+')
@@ -66,5 +68,5 @@ int	ft_atoi(const char *str)
 		res += str[i] - '0';
 		i++;
 	}
-	return (res * signe);
+	return (res * sign);
 }

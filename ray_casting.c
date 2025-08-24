@@ -6,13 +6,11 @@
 /*   By: ahamza <ahamza@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 21:30:00 by molamdao          #+#    #+#             */
-/*   Updated: 2025/08/24 20:01:00 by ahamza           ###   ########.fr       */
+/*   Updated: 2025/08/24 20:22:55 by ahamza           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-
 
 static int	get_wall_orientation_dda(int side, int step_x, int step_y)
 {
@@ -148,9 +146,9 @@ static void	render_column(t_cub3d *cub, t_render_ctx *ctx, int x)
 	p.orientation = &o;
 	d = cast_single_ray_with_orientation(cub, &p);
 	w.img.data = ctx->img_data;
-w.img.ll = ctx->line_length;
-	w.width = ctx->width;
-	w.height = ctx->height;
+    w.img.ll = ctx->line_length;
+    w.width = ctx->width;
+    w.height = ctx->height;
 	w.floor_color = ctx->floor_color;
 	w.ceiling_color = ctx->ceiling_color;
 	w.wall_dist = d;

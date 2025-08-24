@@ -1,6 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   wall_rendering.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahamza <ahamza@student.s19.be>             +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/24 20:32:47 by ahamza            #+#    #+#             */
+/*   Updated: 2025/08/24 20:34:29 by ahamza           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
-
-
 
 static int	read_pixel_from_texture(void *img, int tx, int ty)
 {
@@ -69,6 +79,8 @@ static void	prepare_tex_coords(t_cub3d *cub, t_wall_ctx *c, t_wvars *v)
 	v->step = (double)v->tex_h / (double)v->line_h;
 	v->tex_pos = (double)(v->y0 - (-v->line_h / 2 + c->height / 2)) * v->step;
 }
+
+#include "cub3d.h"
 
 static void	draw_wall_pixel_ctx(t_cub3d *cub, t_wall_ctx *c, t_wvars *v)
 {

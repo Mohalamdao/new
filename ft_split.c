@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: molamdao <molamdao@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahamza <ahamza@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:47:55 by molamdao          #+#    #+#             */
-/*   Updated: 2025/05/12 11:24:45 by molamdao         ###   ########.fr       */
+/*   Updated: 2025/08/24 20:40:11 by ahamza           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,18 +100,3 @@ char	**ft_split(char const *str, char charset)
 	strings[i] = 0;
 	return (strings);
 }
-
-/*#include <stdio.h>
-int	main(int argc, char **argv)
-{n
-	int		index;
-	char	**split;
-	(void)	argc;
-	split = ft_split(argv[1], argv[2]);
-	index = 0;
-	while (split[index])
-	{
-		printf("<%s>\n", split[index]);
-		index++;
-	}
-}*/

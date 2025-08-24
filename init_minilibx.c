@@ -6,20 +6,11 @@
 /*   By: ahamza <ahamza@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 00:30:00 by ahamza            #+#    #+#             */
-/*   Updated: 2025/08/24 19:56:16 by ahamza           ###   ########.fr       */
+/*   Updated: 2025/08/24 20:56:53 by ahamza           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-typedef struct s_imgbuf
-{
-	void	*img;
-	char	*data;
-	int		bpp;
-	int		ll;
-	int		endian;
-}	t_imgbuf;
 
 static int	is_forward(int k)
 {

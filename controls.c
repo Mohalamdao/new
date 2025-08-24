@@ -6,12 +6,11 @@
 /*   By: ahamza <ahamza@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 18:42:00 by molamdao          #+#    #+#             */
-/*   Updated: 2025/08/24 19:35:21 by ahamza           ###   ########.fr       */
+/*   Updated: 2025/08/24 20:25:39 by ahamza           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
 
 static void	update_position(t_cub3d *cub, double new_x, double new_y)
 {
@@ -111,6 +110,3 @@ void	rotate_camera(t_cub3d *cub, int left)
 	else
 		rotate_right(cub, rot_speed, old_dir_x, old_plane_x);
 }
-
-
-
