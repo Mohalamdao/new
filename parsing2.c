@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahamza <ahamza@student.s19.be>             +#+  +:+       +#+        */
+/*   By: molamdao <molamdao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 11:18:55 by molamdao          #+#    #+#             */
-/*   Updated: 2025/07/24 23:06:34 by ahamza           ###   ########.fr       */
+/*   Updated: 2025/08/24 14:33:34 by molamdao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int check_rgb(char *str, int i, int j)
     }
     return(0);
 }
-int check_rgb_text(struct cub3d cub)
+int check_rgb_text(t_cub3d cub)
 {
     if(check_path_text(cub.EA_text) == 1)
         return(1);
@@ -65,7 +65,7 @@ int check_rgb_text(struct cub3d cub)
         return(1);
     return(0);
 }
-void init_player_direction(struct cub3d *cub)
+void init_player_direction(t_cub3d *cub)
 {
     cub->pos_X = cub->pos_j_player + 0.5;
     cub->pos_Y = cub->pos_i_player + 0.5;

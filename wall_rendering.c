@@ -5,8 +5,8 @@
 void put_pixel_to_image(char *img_data, int x, int y, int color, int line_length);
 
 /* Textures utilitaires (déjà présentes dans ton projet) */
-void* get_texture_image(struct cub3d *cub, int orientation);
-int   get_texture_color(struct cub3d *cub, int orientation);
+void* get_texture_image(t_cub3d *cub, int orientation);
+int   get_texture_color(t_cub3d *cub, int orientation);
 
 /* -------------------------------------------------------------------------- */
 /*                        Lecture d’un pixel dans une texture                  */
@@ -27,7 +27,7 @@ static int read_pixel_from_texture(void *img, int tx, int ty)
 /* -------------------------------------------------------------------------- */
 
 // pas de static, signature identique à cub3d.h
-void draw_wall_pixel(struct cub3d *cub, char *img_data, int line_length,
+void draw_wall_pixel(t_cub3d *cub, char *img_data, int line_length,
                      int x, int y, int wall_orientation, int tex_x, int tex_y)
 {
     int color;
@@ -50,7 +50,7 @@ static void draw_flat_pixel(char *img_data, int line_len, int x, int y, int colo
 /*                     Colonne texturée sans “étirement”                       */
 /* -------------------------------------------------------------------------- */
 
-void draw_wall_column_textured(struct cub3d *cub, char *img_data, int line_len,
+void draw_wall_column_textured(t_cub3d *cub, char *img_data, int line_len,
                                int x, int screen_h, double perpDist,
                                int floor_color, int ceiling_color, int orientation)
 {

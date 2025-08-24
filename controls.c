@@ -1,7 +1,7 @@
 #include "cub3d.h"
 
 // Fonction 1 : Déplacer le joueur vers l'avant/arrière
-void move_player_forward_back(struct cub3d *cub, int forward)
+void move_player_forward_back(t_cub3d *cub, int forward)
 {
     double move_speed = 0.1;
     double new_x, new_y;
@@ -27,7 +27,7 @@ void move_player_forward_back(struct cub3d *cub, int forward)
 }
 
 // Fonction 2 : Déplacer le joueur gauche/droite (strafe)
-void move_player_strafe(struct cub3d *cub, int right)
+void move_player_strafe(t_cub3d *cub, int right)
 {
     double move_speed = 0.1;
     double new_x, new_y;
@@ -53,7 +53,7 @@ void move_player_strafe(struct cub3d *cub, int right)
 }
 
 // Fonction 3 : Rotation de la caméra
-void rotate_camera(struct cub3d *cub, int left)
+void rotate_camera(t_cub3d *cub, int left)
 {
     double rot_speed = 0.05;
     double old_dir_x = cub->dir_X;
@@ -72,7 +72,7 @@ void rotate_camera(struct cub3d *cub, int left)
     }
 }
 // Fonction 4 : Redessiner la vue après un mouvement
-void refresh_display(struct cub3d *cub, void *mlx, void *win)
+void refresh_display(t_cub3d *cub, void *mlx, void *win)
 {
     void *img;
     char *img_data;

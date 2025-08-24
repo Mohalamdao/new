@@ -37,7 +37,7 @@ int read_texture_pixel(char *texture_data, int tex_x, int tex_y, int line_length
 }
 
 // Fonction 4 : Obtenir pixel de texture - VERSION OPÉRATIONNELLE
-int get_texture_pixel(struct cub3d *cub, int orientation, int tex_x, int tex_y)
+int get_texture_pixel(t_cub3d *cub, int orientation, int tex_x, int tex_y)
 {
     void *texture_img;
     char *texture_data;
@@ -60,7 +60,7 @@ int get_texture_pixel(struct cub3d *cub, int orientation, int tex_x, int tex_y)
 }
 
 // Fonction 5 : Couleurs de fallback si textures manquantes
-int get_texture_color(struct cub3d *cub, int orientation)
+int get_texture_color(t_cub3d *cub, int orientation)
 {
     (void)cub;
     

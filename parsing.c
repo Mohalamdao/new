@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahamza <ahamza@student.s19.be>             +#+  +:+       +#+        */
+/*   By: molamdao <molamdao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 10:48:00 by molamdao          #+#    #+#             */
-/*   Updated: 2025/07/01 07:02:36 by ahamza           ###   ########.fr       */
+/*   Updated: 2025/08/24 14:33:34 by molamdao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int check_around(struct cub3d *cub , int i, int j)
+int check_around(t_cub3d *cub , int i, int j)
 {
     if(!cub->map[i][j + 1] || !cub->map[i][j - 1 ] || !cub->map[i + 1][j] || !cub->map[i - 1][j]
         || cub->map[i][j + 1] == ' '|| cub->map[i][j - 1 ] == ' '|| cub->map[i + 1][j] == ' ' || cub->map[i - 1][j] == ' ')
         return(1);
     return(0);
 }
-int check_outline(struct cub3d *cub)
+int check_outline(t_cub3d *cub)
 {
     int i;
 
@@ -46,7 +46,7 @@ int check_outline(struct cub3d *cub)
     }
     return(0);
 }
-int check_element_map(struct cub3d *cub, int i, int j)
+int check_element_map(t_cub3d *cub, int i, int j)
 {
     if(cub->map[0] == NULL)
     {
@@ -74,7 +74,7 @@ int check_element_map(struct cub3d *cub, int i, int j)
     return(0);
 }
 
-int pos_player(struct cub3d *cub, int i, int j)  // ← Enlever "int width"
+int pos_player(t_cub3d *cub, int i, int j)  // ← Enlever "int width"
 {   
     cub->count = 0;
     cub->width = 0;  // Initialiser à 0
@@ -109,7 +109,7 @@ int pos_player(struct cub3d *cub, int i, int j)  // ← Enlever "int width"
     return(0);
 }
 
-int parsing(struct cub3d *cub)
+int parsing(t_cub3d *cub)
 {
     if(!cub->ceiling || !cub->EA_text || !cub->floor 
         || !cub->NO_text || !cub->SO_text || !cub->WE_text )

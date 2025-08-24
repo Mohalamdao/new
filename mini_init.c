@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_init.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahamza <ahamza@student.s19.be>             +#+  +:+       +#+        */
+/*   By: molamdao <molamdao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 12:37:37 by molamdao          #+#    #+#             */
-/*   Updated: 2025/06/22 08:43:14 by ahamza           ###   ########.fr       */
+/*   Updated: 2025/08/24 14:33:34 by molamdao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 //     exit(0);
 //     return (0);
 // }
-void init_mini(struct cub3d *cub) 
+void init_mini(t_cub3d *cub) 
 {
     void *mlx;
     void *win;

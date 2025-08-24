@@ -1,5 +1,5 @@
 / Fonction appelée quand une touche est pressée
-int key_press(int keycode, struct cub3d *cub)
+int key_press(int keycode, t_cub3d *cub)
 {
     if (keycode == KEY_W)
         cub->keys.w = 1;
@@ -19,7 +19,7 @@ int key_press(int keycode, struct cub3d *cub)
 }
 
 // Fonction appelée quand une touche est relâchée
-int key_release(int keycode, struct cub3d *cub)
+int key_release(int keycode, t_cub3d *cub)
 {
     if (keycode == KEY_W)
         cub->keys.w = 0;
@@ -39,7 +39,7 @@ int key_release(int keycode, struct cub3d *cub)
 }
 
 // Fonction pour traiter les mouvements selon l'état des touches
-void handle_movement(struct cub3d *cub)
+void handle_movement(t_cub3d *cub)
 {
     // Mouvement avant/arrière
     if (cub->keys.w)
@@ -65,7 +65,7 @@ void handle_movement(struct cub3d *cub)
 }
 
 // Fonction principale de la boucle de jeu
-int cub_loop(struct cub3d *cub)
+int cub_loop(t_cub3d *cub)
 {
     // Traiter les mouvements selon l'état des touches
     handle_movement(cub);
@@ -77,7 +77,7 @@ int cub_loop(struct cub3d *cub)
 }
 
 // Fonction d'initialisation
-void init_cub(struct cub3d *cub)
+void init_cub(t_cub3d *cub)
 {
     // Initialiser MLX
     cub->mlx = mlx_init();
@@ -97,7 +97,7 @@ void init_cub(struct cub3d *cub)
 }
 
 // Exemples de fonctions de mouvement
-void move_forward(struct cub3d *cub)
+void move_forward(t_cub3d *cub)
 {
     double new_x = cub->player.x + cub->player.dir_x * MOVE_SPEED;
     double new_y = cub->player.y + cub->player.dir_y * MOVE_SPEED;
@@ -109,7 +109,7 @@ void move_forward(struct cub3d *cub)
         cub->player.x = new_x;
 }
 
-void rotate_left(struct cub3d *cub)
+void rotate_left(t_cub3d *cub)
 {
     double old_dir_x = cub->player.dir_x;
     double old_plane_x = cub->player.plane_x;

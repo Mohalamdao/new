@@ -11,7 +11,7 @@ int get_wall_orientation_dda(int side, int step_x, int step_y)
 }
 
 // Algorithme DDA pour le raycasting - VERSION CORRIGÉE
-double cast_single_ray_with_orientation(struct cub3d *cub, double pos_x, double pos_y, 
+double cast_single_ray_with_orientation(t_cub3d *cub, double pos_x, double pos_y, 
                                        double ray_dir_x, double ray_dir_y, int *orientation)
 {
     // Position actuelle dans la grille
@@ -109,7 +109,7 @@ double cast_single_ray_with_orientation(struct cub3d *cub, double pos_x, double 
     return perp_wall_dist;
 }
 
-void render_3d_view(struct cub3d *cub, char *img_data, int line_length, 
+void render_3d_view(t_cub3d *cub, char *img_data, int line_length, 
                    int width, int height)
 {
     int floor_color, ceiling_color;

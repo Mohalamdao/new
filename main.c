@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahamza <ahamza@student.s19.be>             +#+  +:+       +#+        */
+/*   By: molamdao <molamdao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 10:47:49 by molamdao          #+#    #+#             */
-/*   Updated: 2025/07/15 18:32:26 by ahamza           ###   ########.fr       */
+/*   Updated: 2025/08/24 14:33:34 by molamdao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int main(int ac, char **av)
 {
-    struct cub3d	cub;
+    t_cub3d	cub;
     
     char **file_content;
     file_content = NULL;

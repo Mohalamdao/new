@@ -1,7 +1,7 @@
 #include "cub3d.h"
 
 // ✅ Fonction 1 : Charger les textures avec gestion d'erreurs
-void load_wall_textures(struct cub3d *cub)
+void load_wall_textures(t_cub3d *cub)
 {
     int width, height;
     
@@ -32,7 +32,7 @@ void load_wall_textures(struct cub3d *cub)
 }
 
 // Fonction 2 : Charger textures Est et Ouest
-void load_remaining_textures(struct cub3d *cub)
+void load_remaining_textures(t_cub3d *cub)
 {
     int width, height;
     
@@ -74,7 +74,7 @@ int get_wall_orientation(double ray_dir_x, double ray_dir_y, double hit_x, doubl
 }
 
 // Fonction 4 : Sélectionner la texture selon l'orientation
-void* get_texture_image(struct cub3d *cub, int orientation)
+void* get_texture_image(t_cub3d *cub, int orientation)
 {
     if (!cub)
         return (NULL);  
