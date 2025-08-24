@@ -1,105 +1,105 @@
 #include "cub3d.h"
-#include <math.h>
 
-/* On utilise la fonction utilitaire définie ailleurs */
-void put_pixel_to_image(char *img_data, int x, int y, int color, int line_length);
 
-/* Textures utilitaires (déjà présentes dans ton projet) */
-void* get_texture_image(t_cub3d *cub, int orientation);
-int   get_texture_color(t_cub3d *cub, int orientation);
 
-/* -------------------------------------------------------------------------- */
-/*                        Lecture d’un pixel dans une texture                  */
-/* -------------------------------------------------------------------------- */
-
-static int read_pixel_from_texture(void *img, int tx, int ty)
+static int	read_pixel_from_texture(void *img, int tx, int ty)
 {
-    if (!img) return 0;
-    int bpp, line_len, endian;
-    char *data = mlx_get_data_addr(img, &bpp, &line_len, &endian);
-    if (!data || bpp <= 0) return 0;
-    char *px = data + ty * line_len + tx * (bpp / 8);
-    return *(int *)px;
+	t_tex	t;
+	char	*px;
+
+	if (!img)
+		return (0);
+	t.data = mlx_get_data_addr(img, &t.bpp, &t.ll, &t.endian);
+	if (!t.data || t.bpp <= 0)
+		return (0);
+	px = t.data + ty * t.ll + tx * (t.bpp / 8);
+	return (*(int *)px);
 }
 
-/* -------------------------------------------------------------------------- */
-/*                              Dessin d’un pixel                               */
-/* -------------------------------------------------------------------------- */
-
-// pas de static, signature identique à cub3d.h
-void draw_wall_pixel(t_cub3d *cub, char *img_data, int line_length,
-                     int x, int y, int wall_orientation, int tex_x, int tex_y)
+static void	draw_flat_top(t_wall_ctx *c, int y0)
 {
-    int color;
-    void *tex = get_texture_image(cub, wall_orientation);
-    if (tex)
-        color = read_pixel_from_texture(tex, tex_x, tex_y);
-    else
-        color = get_texture_color(cub, wall_orientation);
+	int	y;
 
-    put_pixel_to_image(img_data, x, y, color, line_length);
+	y = 0;
+	while (y < y0)
+	{
+		put_pixel_to_image(&c->img, c->x, y, c->ceiling_color);
+		y++;
+	}
 }
 
-
-static void draw_flat_pixel(char *img_data, int line_len, int x, int y, int color)
+static void	draw_flat_bottom(t_wall_ctx *c, int y1)
 {
-    put_pixel_to_image(img_data, x, y, color, line_len);
+	int	y;
+
+	y = y1 + 1;
+	while (y < c->height)
+	{
+		put_pixel_to_image(&c->img, c->x, y, c->floor_color);
+		y++;
+	}
 }
 
-/* -------------------------------------------------------------------------- */
-/*                     Colonne texturée sans “étirement”                       */
-/* -------------------------------------------------------------------------- */
-
-void draw_wall_column_textured(t_cub3d *cub, char *img_data, int line_len,
-                               int x, int screen_h, double perpDist,
-                               int floor_color, int ceiling_color, int orientation)
+static void	setup_strip_bounds(t_wall_ctx *c, t_wvars *v)
 {
-    if (!cub || !img_data) return;
-    if (perpDist < 0.05) perpDist = 0.05;
+	if (c->wall_dist < 0.05)
+		c->wall_dist = 0.05;
+	v->line_h = (int)((double)c->height / c->wall_dist);
+	if (v->line_h < 1)
+		v->line_h = 1;
+	v->y0 = -v->line_h / 2 + c->height / 2;
+	v->y1 = v->line_h / 2 + c->height / 2;
+	if (v->y0 < 0)
+		v->y0 = 0;
+	if (v->y1 >= c->height)
+		v->y1 = c->height - 1;
+}
 
-    /* Hauteur théorique (avant clipping) */
-    int lineHeight = (int)((double)screen_h / perpDist);
-    if (lineHeight < 1) lineHeight = 1;
+static void	prepare_tex_coords(t_cub3d *cub, t_wall_ctx *c, t_wvars *v)
+{
+	v->tex_w = 64;
+	v->tex_h = 64;
+	v->tex_x = (int)(cub->wall_x * (double)v->tex_w);
+	if (v->tex_x < 0)
+		v->tex_x = 0;
+	if (v->tex_x >= v->tex_w)
+		v->tex_x = v->tex_w - 1;
+	if (c->orientation == 0 || c->orientation == 3)
+		v->tex_x = v->tex_w - 1 - v->tex_x;
+	v->step = (double)v->tex_h / (double)v->line_h;
+	v->tex_pos = (double)(v->y0 - (-v->line_h / 2 + c->height / 2)) * v->step;
+}
 
-    /* Bornes théoriques (non clippées) */
-    int drawStart_theo = -lineHeight / 2 + screen_h / 2;
-    int drawEnd_theo   =  lineHeight / 2 + screen_h / 2;
+static void	draw_wall_pixel_ctx(t_cub3d *cub, t_wall_ctx *c, t_wvars *v)
+{
+	int		color;
+	void	*tex;
 
-    /* Clipping écran */
-    int y0 = drawStart_theo; if (y0 < 0) y0 = 0;
-    int y1 = drawEnd_theo;   if (y1 >= screen_h) y1 = screen_h - 1;
+	tex = get_texture_image(cub, c->orientation);
+	if (tex)
+		color = read_pixel_from_texture(tex, v->tex_x, v->tex_y);
+	else
+		color = get_texture_color(cub, c->orientation);
+	put_pixel_to_image(&c->img, c->x, v->y0, color);
+}
 
-    /* Ciel */
-    for (int y = 0; y < y0; ++y)
-        draw_flat_pixel(img_data, line_len, x, y, ceiling_color);
+void	draw_wall_column_textured(t_cub3d *cub, t_wall_ctx *c)
+{
+	t_wvars	v;
 
-    /* Dimensions textures (⚠️ adapte si tes textures ne sont pas carrées 64x64) */
-    int texW = 64, texH = 64;
-
-    /* texX depuis wall_x calculé dans la DDA */
-    int texX = (int)(cub->wall_x * (double)texW);
-    if (texX < 0) texX = 0;
-    if (texX >= texW) texX = texW - 1;
-
-    /* Flip éventuel pour uniformiser l’orientation (selon ta convention) */
-    /* Ici, on retourne horizontalement pour Nord(0) et Ouest(3) */
-    if (orientation == 0 || orientation == 3)
-        texX = texW - 1 - texX;
-
-    /* Avancement régulier dans la texture en partant du DEBUT THEORIQUE */
-    double step   = (double)texH / (double)lineHeight;
-    double texPos = (double)(y0 - drawStart_theo) * step;
-
-    for (int y = y0; y <= y1; ++y) {
-        int texY = (int)texPos;
-        if (texY < 0) texY = 0;
-        if (texY >= texH) texY = texH - 1;
-
-        draw_wall_pixel(cub, img_data, line_len, x, y, orientation, texX, texY);
-        texPos += step;
-    }
-
-    /* Sol */
-    for (int y = y1 + 1; y < screen_h; ++y)
-        draw_flat_pixel(img_data, line_len, x, y, floor_color);
+	setup_strip_bounds(c, &v);
+	draw_flat_top(c, v.y0);
+	prepare_tex_coords(cub, c, &v);
+	while (v.y0 <= v.y1)
+	{
+		v.tex_y = (int)v.tex_pos;
+		if (v.tex_y < 0)
+			v.tex_y = 0;
+		if (v.tex_y >= v.tex_h)
+			v.tex_y = v.tex_h - 1;
+		draw_wall_pixel_ctx(cub, c, &v);
+		v.tex_pos += v.step;
+		v.y0++;
+	}
+	draw_flat_bottom(c, v.y1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   file_content.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: molamdao <molamdao@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahamza <ahamza@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 10:47:47 by molamdao          #+#    #+#             */
-/*   Updated: 2025/08/24 14:55:44 by molamdao         ###   ########.fr       */
+/*   Updated: 2025/08/24 18:47:59 by ahamza           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,13 @@ int	count_map_lines(char **file_content, int start_index)
 static void	set_texture_color(t_cub3d *cub, char *line)
 {
 	if (strncmp(line, "NO", 2) == 0)
-		cub->NO_text = skip_space(line + 3);
+		cub->no_text = skip_space(line + 3);
 	else if (strncmp(line, "SO", 2) == 0)
-		cub->SO_text = skip_space(line + 3);
+		cub->so_text = skip_space(line + 3);
 	else if (strncmp(line, "EA", 2) == 0)
-		cub->EA_text = skip_space(line + 3);
+		cub->ea_text = skip_space(line + 3);
 	else if (strncmp(line, "WE", 2) == 0)
-		cub->WE_text = skip_space(line + 3);
+		cub->we_text = skip_space(line + 3);
 	else if (strncmp(line, "F", 1) == 0)
 		cub->floor = skip_space(line + 2);
 	else if (strncmp(line, "C", 1) == 0)

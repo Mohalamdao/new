@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: molamdao <molamdao@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahamza <ahamza@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 10:47:15 by molamdao          #+#    #+#             */
-/*   Updated: 2025/08/24 14:33:34 by molamdao         ###   ########.fr       */
+/*   Updated: 2025/08/24 20:13:41 by ahamza           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,34 +54,128 @@ typedef struct s_keys
 
 typedef struct s_cub3d
 {
-	char *NO_text;
-	char *SO_text;
-	char *WE_text;
-    char *EA_text;
-	char *floor;
-    char *ceiling;
-	char **map;
-	int pos_i_player;
-	int pos_j_player;
-	void	*WE_WALL;
-	void	*SO_WALL;
-	void	*NO_WALL;
-	void	*EA_WALL;
-	char 	orientation;
-	double		wall_x;
-	double		pos_X;
-	double		pos_Y;
-	double		dir_X;
-	double		dir_Y;
-	double		plane_X;
-	double		plane_Y;
+    char    *no_text;
+    char    *so_text;
+    char    *we_text;
+    char    *ea_text;
+    char    *floor;
+    char    *ceiling;
+    char    **map;
+    int     pos_i_player;
+    int     pos_j_player;
+    void    *we_wall;
+    void    *so_wall;
+    void    *no_wall;
+    void    *ea_wall;
+    char    orientation;
+    double  wall_x;
+    double  pos_x;
+    double  pos_y;
+    double  dir_x;
+    double  dir_y;
+    double  plane_x;
+    double  plane_y;
+    int     width;
+    int     height;
+    int     count;
+    void    *mlx_ptr;
+    void    *win_ptr;
+    t_keys  keys;
+} t_cub3d;
+
+
+typedef struct s_imginfo
+{
+	void	*img;
+	char	*data;
+	int		bpp;
+	int		ll;
+	int		endian;
+	int		w;
+	int		h;
+}	t_imginfo;
+
+typedef struct s_ray_params
+{
+	double	pos_x;
+	double	pos_y;
+	double	ray_dir_x;
+	double	ray_dir_y;
+	int		*orientation;
+}	t_ray_params;
+
+typedef struct s_ray
+{
+	int		map_x;
+	int		map_y;
+	int		step_x;
+	int		step_y;
+	int		side;
+	double	side_dist_x;
+	double	side_dist_y;
+	double	delta_dist_x;
+	double	delta_dist_y;
+}	t_ray;
+
+typedef struct s_render_ctx
+{
+	char	*img_data;
+	int		line_length;
+	int		width;
+	int		height;
+	int		floor_color;
+	int		ceiling_color;
+}	t_render_ctx;
+
+typedef struct s_imgctx
+{
+	char	*data;
+	int		ll;
+}	t_imgctx;
+
+typedef struct s_wall_ctx
+{
+	t_imgctx	img;
+	int			x;
 	int			width;
 	int			height;
-	int			count;
-	void	*mlx_ptr;
-	void	*win_ptr;
-	t_keys	keys;
-} t_cub3d; 
+	double		wall_dist;
+	int			orientation;
+	int			floor_color;
+	int			ceiling_color;
+}	t_wall_ctx;
+
+
+typedef struct s_tex
+{
+	int		bpp;
+	int		ll;
+	int		endian;
+	char	*data;
+}	t_tex;
+
+typedef struct s_wvars
+{
+	int		line_h;
+	int		y0;
+	int		y1;
+	int		tex_w;
+	int		tex_h;
+	int		tex_x;
+	int		tex_y;
+	double	step;
+	double	tex_pos;
+}	t_wvars;
+
+
+
+
+
+typedef struct s_render_ctx t_render_ctx;
+typedef struct s_wall_ctx t_wall_ctx;
+typedef struct s_ray_params t_ray_params;
+
+
 
 char **content_file(char *file, int count);
 void initialization_struct(t_cub3d *cub, char **file_content, int i, int j);
@@ -95,10 +189,9 @@ void init_player_direction(t_cub3d *cub);
 void    init_minilibx(t_cub3d *cub);
 int handle_keypress(int keycode, void *param);
 int close_window(void *param);
-void put_pixel_to_image(char *img_data, int x, int y, int color, int line_length);
-int pos_player(t_cub3d *cub, int i, int j);
-void put_pixel_to_image(char *img_data, int x, int y, int color, int line_length);
-void render_3d_view(t_cub3d *cub, char *img_data, int line_length, int width, int height);
+void	put_pixel_to_image(t_imgctx *img, int x, int y, int color);
+int pos_player(t_cub3d *cub,int i, int j);
+void	render_3d_view(t_cub3d *cub, t_render_ctx *ctx);
 double cast_single_ray(t_cub3d *cub, double pos_x, double pos_y, double ray_dir_x, double ray_dir_y);
 
 void move_player_forward_back(t_cub3d *cub, int forward);
@@ -115,7 +208,7 @@ void init_colors(t_cub3d *cub, int *floor_color, int *ceiling_color);
 void load_wall_textures(t_cub3d *cub);
 int get_wall_orientation(double ray_dir_x, double ray_dir_y, double hit_x, double hit_y);
 int get_texture_color(t_cub3d *cub, int orientation);
-double cast_single_ray_with_orientation(t_cub3d *cub, double pos_x, double pos_y, double ray_dir_x, double ray_dir_y, int *orientation);
+double	cast_single_ray_with_orientation(t_cub3d *cub, t_ray_params *p);
 
 char* get_texture_data(void *texture_img, int *line_length);
 void secure_texture_coords(int *tex_x, int *tex_y);
@@ -127,7 +220,7 @@ void calculate_texture_coords(t_cub3d *cub, int y, int wall_start, int wall_heig
 void draw_ceiling_pixel(char *img_data, int line_length, int x, int y, int ceiling_color);
 void draw_floor_pixel(char *img_data, int line_length, int x, int y, int floor_color);
 void draw_wall_pixel(t_cub3d *cub, char *img_data, int line_length, int x, int y, int wall_orientation, int tex_x, int tex_y);
-void draw_wall_column_textured(t_cub3d *cub, char *img_data, int line_length, int x, int height, double wall_dist, int floor_color, int ceiling_color, int wall_orientation);
+void	draw_wall_column_textured(t_cub3d *cub, t_wall_ctx *ctx);
 
 void load_remaining_textures(t_cub3d *cub);
 

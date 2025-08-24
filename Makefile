@@ -6,7 +6,7 @@
 #    By: ahamza <ahamza@student.s19.be>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/12 10:47:57 by molamdao          #+#    #+#              #
-#    Updated: 2025/08/19 17:58:37 by ahamza           ###   ########.fr        #
+#    Updated: 2025/08/24 18:49:09 by ahamza           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = cub3d
 
 HEADER = cub3d.h
 SRCS =	main.c file_content.c utils.c gnl/get_next_line.c gnl/get_next_line_utils.c \
-		ft_split.c parsing.c parsing2.c mini_init.c init_minilibx.c ray_casting.c controls.c colors.c textures.c texture_utils.c \
+		ft_split.c parsing.c parsing2.c init_minilibx.c ray_casting.c controls.c colors.c textures.c texture_utils.c \
 		wall_rendering.c
 
 OBJS = $(SRCS:.c=.o)

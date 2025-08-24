@@ -1,137 +1,172 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ray_casting.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahamza <ahamza@student.s19.be>             +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/24 21:30:00 by molamdao          #+#    #+#             */
+/*   Updated: 2025/08/24 20:01:00 by ahamza           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-// Fonction pour déterminer l'orientation du mur touché
-int get_wall_orientation_dda(int side, int step_x, int step_y)
+
+
+static int	get_wall_orientation_dda(int side, int step_x, int step_y)
 {
-    if (side == 0) {  // Intersection verticale (NS wall)
-        return (step_x > 0) ? 0 : 2;
-    } else {  // Intersection horizontale (EW wall)
-        return (step_y > 0) ? 3 : 1;
-    }
+	if (side == 0)
+	{
+		if (step_x > 0)
+			return (0);
+		return (2);
+	}
+	if (step_y > 0)
+		return (3);
+	return (1);
 }
 
-// Algorithme DDA pour le raycasting - VERSION CORRIGÉE
-double cast_single_ray_with_orientation(t_cub3d *cub, double pos_x, double pos_y, 
-                                       double ray_dir_x, double ray_dir_y, int *orientation)
+static void	init_dda_pos_delta(t_ray *r, t_ray_params *p)
 {
-    // Position actuelle dans la grille
-    int map_x = (int)pos_x;
-    int map_y = (int)pos_y;
-    
-    // Distance entre les intersections consécutives
-    double delta_dist_x = (ray_dir_x == 0) ? 1e30 : fabs(1.0 / ray_dir_x);
-    double delta_dist_y = (ray_dir_y == 0) ? 1e30 : fabs(1.0 / ray_dir_y);
-    
-    // Direction du pas et distance jusqu'à la première intersection
-    int step_x, step_y;
-    double side_dist_x, side_dist_y;
-    
-    // Calcul pour l'axe X
-    if (ray_dir_x < 0) {
-        step_x = -1;
-        side_dist_x = (pos_x - map_x) * delta_dist_x;
-    } else {
-        step_x = 1;
-        side_dist_x = (map_x + 1.0 - pos_x) * delta_dist_x;
-    }
-    
-    // Calcul pour l'axe Y
-    if (ray_dir_y < 0) {
-        step_y = -1;
-        side_dist_y = (pos_y - map_y) * delta_dist_y;
-    } else {
-        step_y = 1;
-        side_dist_y = (map_y + 1.0 - pos_y) * delta_dist_y;
-    }
-    
-    // Algorithme DDA
-    int hit = 0;
-    int side;
-    
-    while (hit == 0) {
-        if (side_dist_x < side_dist_y) {
-            side_dist_x += delta_dist_x;
-            map_x += step_x;
-            side = 0;
-        } else {
-            side_dist_y += delta_dist_y;
-            map_y += step_y;
-            side = 1;
-        }
-        
-        if (map_y < 0 || map_y >= cub->height || map_x < 0 || map_x >= cub->width) {
-            break;
-        }
-        
-        if (cub->map[map_y] && map_x < (int)strlen(cub->map[map_y]) && 
-            cub->map[map_y][map_x] == '1') {
-            hit = 1;
-        }
-    }
-    
-    // 🔧 CORRECTION CRITIQUE : Calculer la distance perpendiculaire avec plus de précision
-    double perp_wall_dist;
-    if (side == 0) {
-        perp_wall_dist = (map_x - pos_x + (1 - step_x) / 2) / ray_dir_x;
-    } else {
-        perp_wall_dist = (map_y - pos_y + (1 - step_y) / 2) / ray_dir_y;
-    }
-    
-    // 🔧 CORRECTION 1 : Calcul de wall_x avec DOUBLE PRÉCISION
-    double wall_hit_x, wall_hit_y;
-    
-    // Calculer la position exacte de l'intersection
-    wall_hit_x = pos_x + perp_wall_dist * ray_dir_x;
-    wall_hit_y = pos_y + perp_wall_dist * ray_dir_y;
-    
-    // 🔧 CORRECTION 2 : Calculer wall_x selon l'orientation, pas le side
-    if (side == 0) {
-        // Mur vertical (intersection NS) : utiliser Y
-        cub->wall_x = wall_hit_y;
-    } else {
-        // Mur horizontal (intersection EW) : utiliser X  
-        cub->wall_x = wall_hit_x;
-    }
-    
-    // 🔧 CORRECTION 3 : Garder la partie fractionnaire avec plus de précision
-    cub->wall_x = cub->wall_x - floor(cub->wall_x);
-    
-    // S'assurer que wall_x est dans [0, 1)
-    if (cub->wall_x < 0) cub->wall_x = 0;
-    if (cub->wall_x >= 1.0) cub->wall_x = 0.999999;
-    
-    // Déterminer l'orientation du mur
-    *orientation = get_wall_orientation_dda(side, step_x, step_y);
-    
-    // 🔧 CORRECTION 4 : Protection plus stricte contre les distances trop petites
-    if (perp_wall_dist < 0.01) perp_wall_dist = 0.01;
-    
-    return perp_wall_dist;
+	r->map_x = (int)p->pos_x;
+	r->map_y = (int)p->pos_y;
+	if (p->ray_dir_x == 0)
+		r->delta_dist_x = 1e30;
+	else
+		r->delta_dist_x = fabs(1.0 / p->ray_dir_x);
+	if (p->ray_dir_y == 0)
+		r->delta_dist_y = 1e30;
+	else
+		r->delta_dist_y = fabs(1.0 / p->ray_dir_y);
 }
 
-void render_3d_view(t_cub3d *cub, char *img_data, int line_length, 
-                   int width, int height)
+static void	init_dda_steps(t_ray *r, t_ray_params *p)
 {
-    int floor_color, ceiling_color;
-    
-    printf("🔮 Ray-casting 3D DDA : %d rayons\n", width);
-    
-    // Initialiser les couleurs depuis le fichier
-    init_colors(cub, &floor_color, &ceiling_color);
-    
-    // Utiliser les valeurs déjà initialisées dans ta structure
-    int x = 0;
-    while (x < width) {
-        double camera_x = 2 * x / (double)width - 1;
-        double ray_dir_x = cub->dir_X + cub->plane_X * camera_x;
-        double ray_dir_y = cub->dir_Y + cub->plane_Y * camera_x;
-        
-        int wall_orientation;
-        double wall_dist = cast_single_ray_with_orientation(cub, cub->pos_X, cub->pos_Y, 
-                                                           ray_dir_x, ray_dir_y, &wall_orientation);
-                                                           // DEBUG temporaire
-        draw_wall_column_textured(cub, img_data, line_length, x, height, wall_dist, 
-                                 floor_color, ceiling_color, wall_orientation);
-        x++;
-    }
+	if (p->ray_dir_x < 0)
+	{
+		r->step_x = -1;
+		r->side_dist_x = (p->pos_x - r->map_x) * r->delta_dist_x;
+	}
+	else
+	{
+		r->step_x = 1;
+		r->side_dist_x = (r->map_x + 1.0 - p->pos_x) * r->delta_dist_x;
+	}
+	if (p->ray_dir_y < 0)
+	{
+		r->step_y = -1;
+		r->side_dist_y = (p->pos_y - r->map_y) * r->delta_dist_y;
+	}
+	else
+	{
+		r->step_y = 1;
+		r->side_dist_y = (r->map_y + 1.0 - p->pos_y) * r->delta_dist_y;
+	}
+}
+
+static void	perform_dda(t_cub3d *cub, t_ray *r)
+{
+	int	hit;
+
+	hit = 0;
+	while (hit == 0)
+	{
+		if (r->side_dist_x < r->side_dist_y)
+		{
+			r->side_dist_x += r->delta_dist_x;
+			r->map_x += r->step_x;
+			r->side = 0;
+		}
+		else
+		{
+			r->side_dist_y += r->delta_dist_y;
+			r->map_y += r->step_y;
+			r->side = 1;
+		}
+		if (r->map_y < 0 || r->map_y >= cub->height
+			|| r->map_x < 0 || r->map_x >= cub->width)
+			break ;
+		if (cub->map[r->map_y] && r->map_x < (int)strlen(cub->map[r->map_y])
+			&& cub->map[r->map_y][r->map_x] == '1')
+			hit = 1;
+	}
+}
+
+static double	calc_perp_dist(t_cub3d *cub, t_ray *r, t_ray_params *p)
+{
+	double	d;
+	double	hx;
+	double	hy;
+
+	if (r->side == 0)
+		d = (r->map_x - p->pos_x + (1 - r->step_x) / 2) / p->ray_dir_x;
+	else
+		d = (r->map_y - p->pos_y + (1 - r->step_y) / 2) / p->ray_dir_y;
+	hx = p->pos_x + d * p->ray_dir_x;
+	hy = p->pos_y + d * p->ray_dir_y;
+	if (r->side == 0)
+		cub->wall_x = hy;
+	else
+		cub->wall_x = hx;
+	cub->wall_x -= floor(cub->wall_x);
+	if (cub->wall_x < 0)
+		cub->wall_x = 0;
+	if (cub->wall_x >= 1.0)
+		cub->wall_x = 0.999999;
+	if (d < 0.01)
+		d = 0.01;
+	return (d);
+}
+
+double	cast_single_ray_with_orientation(t_cub3d *cub, t_ray_params *p)
+{
+	t_ray	r;
+	double	d;
+
+	init_dda_pos_delta(&r, p);
+	init_dda_steps(&r, p);
+	perform_dda(cub, &r);
+	d = calc_perp_dist(cub, &r, p);
+	*(p->orientation) = get_wall_orientation_dda(r.side, r.step_x, r.step_y);
+	return (d);
+}
+
+static void	render_column(t_cub3d *cub, t_render_ctx *ctx, int x)
+{
+	t_ray_params	p;
+	t_wall_ctx		w;
+	int				o;
+	double			d;
+
+	p.pos_x = cub->pos_x;
+	p.pos_y = cub->pos_y;
+	p.ray_dir_x = cub->dir_x + cub->plane_x
+		* (2 * x / (double)ctx->width - 1);
+	p.ray_dir_y = cub->dir_y + cub->plane_y
+		* (2 * x / (double)ctx->width - 1);
+	p.orientation = &o;
+	d = cast_single_ray_with_orientation(cub, &p);
+	w.img.data = ctx->img_data;
+w.img.ll = ctx->line_length;
+	w.width = ctx->width;
+	w.height = ctx->height;
+	w.floor_color = ctx->floor_color;
+	w.ceiling_color = ctx->ceiling_color;
+	w.wall_dist = d;
+	w.x = x;
+	w.orientation = o;
+	draw_wall_column_textured(cub, &w);
+}
+
+void	render_3d_view(t_cub3d *cub, t_render_ctx *ctx)
+{
+	int	x;
+
+	x = 0;
+	while (x < ctx->width)
+	{
+		render_column(cub, ctx, x);
+		x++;
+	}
 }
