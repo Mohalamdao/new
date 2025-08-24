@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahamza <ahamza@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/24 20:32:47 by ahamza            #+#    #+#             */
-/*   Updated: 2025/08/24 20:34:29 by ahamza           ###   ########.fr       */
+/*   Created: 2025/08/24 21:46:22 by ahamza            #+#    #+#             */
+/*   Updated: 2025/08/24 21:46:23 by ahamza           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static int	read_pixel_from_texture(void *img, int tx, int ty)
+int	read_pixel_from_texture(void *img, int tx, int ty)
 {
 	t_tex	t;
 	char	*px;
@@ -26,7 +26,7 @@ static int	read_pixel_from_texture(void *img, int tx, int ty)
 	return (*(int *)px);
 }
 
-static void	draw_flat_top(t_wall_ctx *c, int y0)
+void	draw_flat_top(t_wall_ctx *c, int y0)
 {
 	int	y;
 
@@ -38,7 +38,7 @@ static void	draw_flat_top(t_wall_ctx *c, int y0)
 	}
 }
 
-static void	draw_flat_bottom(t_wall_ctx *c, int y1)
+void	draw_flat_bottom(t_wall_ctx *c, int y1)
 {
 	int	y;
 
@@ -50,7 +50,7 @@ static void	draw_flat_bottom(t_wall_ctx *c, int y1)
 	}
 }
 
-static void	setup_strip_bounds(t_wall_ctx *c, t_wvars *v)
+void	setup_strip_bounds(t_wall_ctx *c, t_wvars *v)
 {
 	if (c->wall_dist < 0.05)
 		c->wall_dist = 0.05;
@@ -65,7 +65,7 @@ static void	setup_strip_bounds(t_wall_ctx *c, t_wvars *v)
 		v->y1 = c->height - 1;
 }
 
-static void	prepare_tex_coords(t_cub3d *cub, t_wall_ctx *c, t_wvars *v)
+void	prepare_tex_coords(t_cub3d *cub, t_wall_ctx *c, t_wvars *v)
 {
 	v->tex_w = 64;
 	v->tex_h = 64;
@@ -78,40 +78,4 @@ static void	prepare_tex_coords(t_cub3d *cub, t_wall_ctx *c, t_wvars *v)
 		v->tex_x = v->tex_w - 1 - v->tex_x;
 	v->step = (double)v->tex_h / (double)v->line_h;
 	v->tex_pos = (double)(v->y0 - (-v->line_h / 2 + c->height / 2)) * v->step;
-}
-
-#include "cub3d.h"
-
-static void	draw_wall_pixel_ctx(t_cub3d *cub, t_wall_ctx *c, t_wvars *v)
-{
-	int		color;
-	void	*tex;
-
-	tex = get_texture_image(cub, c->orientation);
-	if (tex)
-		color = read_pixel_from_texture(tex, v->tex_x, v->tex_y);
-	else
-		color = get_texture_color(cub, c->orientation);
-	put_pixel_to_image(&c->img, c->x, v->y0, color);
-}
-
-void	draw_wall_column_textured(t_cub3d *cub, t_wall_ctx *c)
-{
-	t_wvars	v;
-
-	setup_strip_bounds(c, &v);
-	draw_flat_top(c, v.y0);
-	prepare_tex_coords(cub, c, &v);
-	while (v.y0 <= v.y1)
-	{
-		v.tex_y = (int)v.tex_pos;
-		if (v.tex_y < 0)
-			v.tex_y = 0;
-		if (v.tex_y >= v.tex_h)
-			v.tex_y = v.tex_h - 1;
-		draw_wall_pixel_ctx(cub, c, &v);
-		v.tex_pos += v.step;
-		v.y0++;
-	}
-	draw_flat_bottom(c, v.y1);
 }

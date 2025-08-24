@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahamza <ahamza@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/12 10:47:47 by molamdao          #+#    #+#             */
-/*   Updated: 2025/08/24 18:47:59 by ahamza           ###   ########.fr       */
+/*   Created: 2025/08/24 21:44:32 by ahamza            #+#    #+#             */
+/*   Updated: 2025/08/24 21:44:33 by ahamza           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	count_map_lines(char **file_content, int start_index)
 	return (count);
 }
 
-static void	set_texture_color(t_cub3d *cub, char *line)
+void	set_texture_color(t_cub3d *cub, char *line)
 {
 	if (strncmp(line, "NO", 2) == 0)
 		cub->no_text = skip_space(line + 3);

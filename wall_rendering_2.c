@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahamza <ahamza@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/24 20:32:50 by ahamza            #+#    #+#             */
-/*   Updated: 2025/08/24 20:32:51 by ahamza           ###   ########.fr       */
+/*   Created: 2025/08/24 21:46:17 by ahamza            #+#    #+#             */
+/*   Updated: 2025/08/24 21:46:18 by ahamza           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static void	draw_wall_pixel_ctx(t_cub3d *cub, t_wall_ctx *c, t_wvars *v)
+void	draw_wall_pixel_ctx(t_cub3d *cub, t_wall_ctx *c, t_wvars *v)
 {
 	int		color;
 	void	*tex;

@@ -5,21 +5,21 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahamza <ahamza@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/04 14:47:55 by molamdao          #+#    #+#             */
-/*   Updated: 2025/08/24 20:40:11 by ahamza           ###   ########.fr       */
+/*   Created: 2025/08/24 21:44:37 by ahamza            #+#    #+#             */
+/*   Updated: 2025/08/24 21:44:38 by ahamza           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static int	check_separator(char c, char charset)
+int	check_separator(char c, char charset)
 {
 	if (c == charset)
 		return (1);
 	return (0);
 }
 
-static int	count_strings(char *str, char charset)
+int	count_strings(char *str, char charset)
 {
 	int	i;
 	int	count;
@@ -38,7 +38,7 @@ static int	count_strings(char *str, char charset)
 	return (count);
 }
 
-static char	*ft_mallocword(char *str, char charset)
+char	*ft_mallocword(char *str, char charset)
 {
 	int		len;
 	int		i;
@@ -60,7 +60,7 @@ static char	*ft_mallocword(char *str, char charset)
 	return (word);
 }
 
-static void	ft_free(char **strr)
+static void	ft_freee(char **strr)
 {
 	int	i;
 
@@ -91,7 +91,7 @@ char	**ft_split(char const *str, char charset)
 		{
 			strings[i] = ft_mallocword((char *)str, charset);
 			if (!strings[i])
-				return (ft_free(strings), NULL);
+				return (ft_freee(strings), NULL);
 			i++;
 		}
 		while (*str && !check_separator(*str, charset))

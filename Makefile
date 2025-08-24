@@ -4,7 +4,8 @@ NAME = cub3d
 HEADER = cub3d.h
 SRCS =	main.c file_content.c utils.c gnl/get_next_line.c gnl/get_next_line_utils.c \
 		ft_split.c parsing.c parsing_2.c init_minilibx.c ray_casting.c controls.c colors.c texture.c texture_utils.c \
-		wall_rendering.c 
+		wall_rendering.c wall_rendering_2.c ray_casting_2.c parsing_3.c init_minilibx_2.c \
+		init_minilibx_utils.c init_minilibx_utils_2.c controls_2.c
 
 OBJS = $(SRCS:.c=.o)
 
